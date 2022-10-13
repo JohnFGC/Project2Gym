@@ -44,7 +44,7 @@ public class MemberDatabase {
      * then stores the old members in the list, and replaces the
      * old database list with the new one
      */
-    protected void grow() {
+    private void grow() {
         int newLength = Constant.INCREASE_CAPACITY.getValue() + this.size;
         Member[] newList = new Member[newLength];
         for (int i = 0; i < this.mlist.length; i++) {         //Enters old member info into new larger list

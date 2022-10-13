@@ -45,9 +45,15 @@ public class Premium extends Family{
                 +  super.guestPasses;
     }
 
+    /**
+     * Returns membership fee
+     * Per Month fee is paid annually with no one-time fee
+     * and one month free
+     * @return membership fee
+     */
     @Override
     public double membershipFee(){
-        return 59.99*11;
+        return Fee.FAMILY_PER_MONTH.getPrice() * (Constant.ANNUALLY_NUM_MONTHS.getValue() - 1);
     }
 
 }

@@ -22,7 +22,7 @@ public class ClassSchedule {
 
     /**
      * Adds a class into the schedule
-     * If the list is at full capacity, grow list by 4
+     * If the array is at full capacity, grow list by 4
      * @param fc the class to add into the schedule
      */
     public void addClass(FitnessClass fc){

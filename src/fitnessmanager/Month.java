@@ -34,8 +34,6 @@ public enum Month {
         this.lastDayInMonth = lastDayInMonth;
     }
 
-
-
     /**
      * Getter method for numerical representation of month
      * @return numerical representation of month
@@ -52,6 +50,13 @@ public enum Month {
         return this.lastDayInMonth;
     }
 
+    /**
+     * Method takes in int and returns corresponding month enum
+     * @param numberMonth, int that represents month
+     *   (e.g. 1 - January, 2 - February...)
+     * @return month that corresponds to numberMonth
+     *         null otherwise
+     */
     public static Month intToMonth(int numberMonth){
         for (Month month: Month.values()){
             if (numberMonth == month.getNumberMonth()){

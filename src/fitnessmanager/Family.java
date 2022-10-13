@@ -1,5 +1,14 @@
 package fitnessmanager;
 
+/**
+ * Member Class is a blueprint for member objects
+ * Stores the following member data:
+ *  - First and Last name
+ *  - Date of Birth
+ *  - Date of Membership Expiration
+ *  - Location of Gym Membership
+ * @author Arya Shetty, John Greaney-Cheng
+ */
 public class Family extends Member{
     protected int guestPasses;
 
@@ -49,8 +58,14 @@ public class Family extends Member{
                 +  this.guestPasses;
     }
 
+    /**
+     * Returns membership fee
+     * Per Month fee is paid quarterly with a one-time fee
+     * @return membership fee
+     */
     @Override
     public double membershipFee(){
-        return ((3 * 59.99) + 29.99);
+        return ((Fee.FAMILY_PER_MONTH.getPrice() * Constant.QUARTERLY_NUM_MONTHS.getValue())
+                    + Fee.ONE_TIME_FEE.getPrice());
     }
 }

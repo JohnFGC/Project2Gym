@@ -70,8 +70,14 @@ public class Member implements Comparable<Member>{
         this.lname = lname;
     }
 
+    /**
+     * Returns membership fee
+     * Per Month fee is paid quarterly with a one-time fee
+     * @return membership fee
+     */
     public double membershipFee(){
-        return (39.99 * 3) + 29.99;
+        return (Fee.STANDARD_PER_MONTH.getPrice() * Constant.QUARTERLY_NUM_MONTHS.getValue())
+                    + Fee.ONE_TIME_FEE.getPrice();
     }
 
     /**

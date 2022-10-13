@@ -123,16 +123,16 @@ public class GymManager {
     }
 
     /**
-     * Adds gym member to database
-     * Checks if member is valid first
+     * Adds standard gym member to database
+     * Checks if member can be added first
      * @param fname first name of the member to add
      * @param lname last name of the member to add
      * @param dob birthday of the member to add
      * @param location the gym the member belongs to
      */
     private void addStandard(String fname, String lname, String dob, String location){
-        if (isValidMember(dob, location)){
-            Date expire = getExpirationDate("Standard");
+        if (canBeAdded(dob, location)){
+            Date expire = getExpirationDate(MembershipType.STANDARD);
             if (this.db.add(new Member(fname, lname, dob, expire, location))){               //Checks if member has already been added to database
                 System.out.println(fname + " " + lname + " added.");
             }
@@ -142,9 +142,17 @@ public class GymManager {
         }
     }
 
+    /**
+     * Adds family gym member to database
+     * Checks if member can be added first
+     * @param fname first name of the member to add
+     * @param lname last name of the member to add
+     * @param dob birthday of the member to add
+     * @param location the gym the member belongs to
+     */
     private void addFamily(String fname, String lname, String dob, String location){
-        if (isValidMember(dob, location)){
-            Date expire = getExpirationDate("Family");
+        if (canBeAdded(dob, location)){
+            Date expire = getExpirationDate(MembershipType.FAMILY);
             if (this.db.add(new Family(fname, lname, dob, expire.toString(), location))){               //Checks if member has already been added to database
                 System.out.println(fname + " " + lname + " added.");
             }
@@ -154,9 +162,17 @@ public class GymManager {
         }
     }
 
+    /**
+     * Adds premium gym member to database
+     * Checks if member can be added first
+     * @param fname first name of the member to add
+     * @param lname last name of the member to add
+     * @param dob birthday of the member to add
+     * @param location the gym the member belongs to
+     */
     private void addPremium(String fname, String lname, String dob, String location){
-        if (isValidMember(dob, location)){
-            Date expire = getExpirationDate("Premium");
+        if (canBeAdded(dob, location)){
+            Date expire = getExpirationDate(MembershipType.PREMIUM);
             if (this.db.add(new Premium(fname, lname, dob, expire.toString(), location))){               //Checks if member has already been added to database
                 System.out.println(fname + " " + lname + " added.");
             }
@@ -177,7 +193,7 @@ public class GymManager {
      * @param location the gym the member belongs to
      * @return true if member meets conditions to be added, false otherwise
      */
-    private boolean isValidMember(String dob, String location){
+    private boolean canBeAdded(String dob, String location){
         Date birthday = new Date(dob);
         if (!birthday.isValid()){                                                       //Checks if birthday date is a valid date
             System.out.println("DOB " + dob + ": invalid calendar date!");
@@ -266,7 +282,7 @@ public class GymManager {
     /**
      * Prints out unsorted list of members with their fees and guest passes
      * Checks if list is empty,
-     * if not, prints unsorted list of members
+     * if not, prints unsorted list of members with fees
      */
     private void printMemberWithFees(){
         if (this.db.isEmpty()){
@@ -557,18 +573,27 @@ public class GymManager {
         return false;
     }
 
-    private Date getExpirationDate(String membershipType){
+    /**
+     * Returns expiration date of newly added member
+     * Expiration date depends on membership type of member
+     * For Standard and Family, expiration date is three months
+     * from today
+     * For Premium, expiration date is one year from today
+     * @param membershipType memberbership type of member
+     * @return expiration date corresponding to membership type
+     */
+    private Date getExpirationDate(MembershipType membershipType){
         Date today = new Date();
         switch (membershipType){
-            case "Standard":
-            case "Family":
+            case STANDARD:
+            case FAMILY:
                 int futureMonth = 3 + today.getMonth();
                 if (futureMonth > 12){
                     futureMonth = futureMonth - 12;
                     return new Date(futureMonth, today.getDay(), today.getYear() + 1);
                 }
                 return new Date(futureMonth, today.getDay(), today.getYear());
-            case "Premium":
+            case PREMIUM:
                 return new Date(today.getMonth(), today.getDay(), today.getYear() + 1);
         }
         return null;

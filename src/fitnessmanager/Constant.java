@@ -13,8 +13,9 @@ public enum Constant {
     FIRST_DAY_OF_MONTH(1),
     MINIMUM_AGE(18),
     STARTING_CAPACITY(4),
-    INCREASE_CAPACITY(4);
-
+    INCREASE_CAPACITY(4),
+    QUARTERLY_NUM_MONTHS(3),
+    ANNUALLY_NUM_MONTHS(12);
 
     private final int value;
 
