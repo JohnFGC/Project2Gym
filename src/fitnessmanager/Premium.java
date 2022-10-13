@@ -13,23 +13,31 @@ package fitnessmanager;
  * @author Arya Shetty, John Greaney-Cheng
  */
 public class Premium extends Family{
+
+    /**
+     * Creates a premium member object
+     * Starts with 3 guest passes (max per premium membership)
+     * @param fname first name of the member
+     * @param lname last name of the member
+     * @param dob birthday of the member
+     * @param expire expiration date of the member's gym membership
+     * @param location the gym the member belongs to
+     */
     public Premium(String fname, String lname, String dob, String expire, String location){
         super(fname, lname, dob, expire, location);
-        this.guestPasses = 3;
+        this.guestPasses = Constant.PREMIUM_MAX_PASS_NUM.getValue();
     }
 
-    @Override
-    public boolean useGuestPass(){
-        if(guestPasses >= 1) {
-            this.guestPasses--;
-            return true;
-        }
-        return false;
-    }
-
+    /**
+     * Returns guest pass for when guest drops out of class
+     * If number of guest passes is less than max value,
+     * add one to guest passes
+     * @return true if guest pass is returned,
+     *         false otherwise
+     */
     @Override
     public boolean returnGuestPass(){
-        if(guestPasses <= 2) {
+        if(guestPasses < Constant.PREMIUM_MAX_PASS_NUM.getValue()) {
             this.guestPasses++;
             return true;
         }

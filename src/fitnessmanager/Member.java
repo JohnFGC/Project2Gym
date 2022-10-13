@@ -17,7 +17,7 @@ public class Member implements Comparable<Member>{
     protected Location location;
 
     /**
-     * Creates a member object
+     * Creates a standard member object
      * @param fname first name of the member
      * @param lname last name of the member
      * @param dob birthday of the member
@@ -33,7 +33,7 @@ public class Member implements Comparable<Member>{
     }
 
     /**
-     * Creates a member object
+     * Creates a standard member object
      * @param fname first name of the member
      * @param lname last name of the member
      * @param dob birthday of the member
@@ -49,7 +49,7 @@ public class Member implements Comparable<Member>{
     }
 
     /**
-     * Creates a member object
+     * Creates a standard member object
      * @param fname first name of the member
      * @param lname last name of the member
      * @param dob birthday of the member
@@ -61,7 +61,7 @@ public class Member implements Comparable<Member>{
     }
 
     /**
-     * Creates a member object
+     * Creates a standard member object
      * @param fname first name of the member
      * @param lname last name of the member
      */

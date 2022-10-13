@@ -15,7 +15,9 @@ public enum Constant {
     STARTING_CAPACITY(4),
     INCREASE_CAPACITY(4),
     QUARTERLY_NUM_MONTHS(3),
-    ANNUALLY_NUM_MONTHS(12);
+    ANNUALLY_NUM_MONTHS(12),
+    FAMILY_MAX_PASS_NUM(1),
+    PREMIUM_MAX_PASS_NUM(3);
 
     private final int value;
 

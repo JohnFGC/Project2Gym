@@ -15,25 +15,45 @@ package fitnessmanager;
 public class Family extends Member{
     protected int guestPasses;
 
+    /**
+     * Creates a family member object
+     * Starts with 1 guest pass (max per family membership)
+     * @param fname first name of the member
+     * @param lname last name of the member
+     * @param dob birthday of the member
+     * @param expire expiration date of the member's gym membership
+     * @param location the gym the member belongs to
+     */
     public Family(String fname, String lname, String dob, String expire, String location){
         super(fname, lname, dob, expire, location);
-        this.guestPasses = 1;
+        this.guestPasses = Constant.FAMILY_MAX_PASS_NUM.getValue();
     }
 
-    public int getGuestPasses(){
-        return this.guestPasses;
-    }
-
+    /**
+     * Uses guest pass
+     * If number of guest passes is zero,
+     * guest pass can't be used
+     * Otherwise, number of guest passes decreases by one
+     * @return true if guest pass is used,
+     *         false otherwise
+     */
     public boolean useGuestPass() {
-        if(guestPasses == 1) {
+        if(guestPasses > 0) {
             this.guestPasses--;
             return true;
         }
         return false;
     }
 
+    /**
+     * Returns guest pass for when guest drops out of class
+     * If number of guest passes is less than max value,
+     * add one to guest passes
+     * @return true if guest pass is returned,
+     *         false otherwise
+     */
     public boolean returnGuestPass() {
-        if(guestPasses == 0) {
+        if(guestPasses < Constant.FAMILY_MAX_PASS_NUM.getValue()) {
             this.guestPasses++;
             return true;
         }
