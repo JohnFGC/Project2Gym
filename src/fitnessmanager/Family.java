@@ -1,12 +1,15 @@
 package fitnessmanager;
 
 /**
- * Member Class is a blueprint for member objects
+ * Family Class is a blueprint for members with family membership
  * Stores the following member data:
  *  - First and Last name
  *  - Date of Birth
  *  - Date of Membership Expiration
  *  - Location of Gym Membership
+ *  - Number of Guest Passes
+ *  Has different properties than standard member
+ *  for membership fee and guest passes
  * @author Arya Shetty, John Greaney-Cheng
  */
 public class Family extends Member{

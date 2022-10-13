@@ -1,5 +1,17 @@
 package fitnessmanager;
 
+/**
+ * Premium Class is a blueprint for members with premium membership
+ * Stores the following member data:
+ *  - First and Last name
+ *  - Date of Birth
+ *  - Date of Membership Expiration
+ *  - Location of Gym Membership
+ *  - Number of Guest Passes
+ *  Has different properties than family membership
+ *  for membership fee and guest passes
+ * @author Arya Shetty, John Greaney-Cheng
+ */
 public class Premium extends Family{
     public Premium(String fname, String lname, String dob, String expire, String location){
         super(fname, lname, dob, expire, location);
