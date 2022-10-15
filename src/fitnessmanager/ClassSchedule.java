@@ -48,6 +48,12 @@ public class ClassSchedule {
         this.classes = newList;
     }
 
+    /**
+     * Returns fitness class in class schedule equal to input parameter
+     * @param fc the fitness class to find in class schedule
+     * @return equivalent fitness class in class schedule if it exists
+     *         null otherwise
+     */
     public FitnessClass classExists(FitnessClass fc){
         for(int i = 0; i < numClasses; i++){
             if(fc.equals(classes[i])){
@@ -57,7 +63,13 @@ public class ClassSchedule {
         return null;
     }
 
-    public FitnessClass findMemberClass(Member member){
+    /**
+     * Returns fitness class in class schedule containing input member
+     * @param member member to find enrolled in fitness class in class schedule
+     * @return fitness class containing member in class schedule if it exists
+     *         null otherwise
+     */
+    public FitnessClass findClassMemberEnrolledIn(Member member){
         for(int i = 0; i < numClasses; i++){
             if(classes[i].find(member) != null){
                 return classes[i];

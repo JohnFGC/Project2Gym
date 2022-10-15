@@ -85,7 +85,7 @@ public class GymManager {
     private boolean checkCommandNew(Scanner sc, String command){
         switch (command){
             case "A":                                   //Add member to database
-                addStandard(sc.next(), sc.next(), sc.next(), sc.next());
+                add(sc.next(), sc.next(), sc.next(), sc.next(), MembershipType.STANDARD);
                 break;
             case "LS":
                 loadSchedule();
@@ -94,10 +94,10 @@ public class GymManager {
                 loadMemberList();
                 break;
             case "AF":
-                addFamily(sc.next(), sc.next(), sc.next(), sc.next());
+                add(sc.next(), sc.next(), sc.next(), sc.next(), MembershipType.FAMILY);
                 break;
             case "AP":
-                addPremium(sc.next(), sc.next(), sc.next(), sc.next());
+                add(sc.next(), sc.next(), sc.next(), sc.next(), MembershipType.PREMIUM);
                 break;
             case "PF":
                 printMemberWithFees();
@@ -123,57 +123,32 @@ public class GymManager {
     }
 
     /**
-     * Adds standard gym member to database
+     * Adds gym member to database
      * Checks if member can be added first
      * @param fname first name of the member to add
      * @param lname last name of the member to add
      * @param dob birthday of the member to add
      * @param location the gym the member belongs to
+     * @param membershipType membership type of the gym member
      */
-    private void addStandard(String fname, String lname, String dob, String location){
+    private void add(String fname, String lname, String dob, String location, MembershipType membershipType){
         if (canBeAdded(dob, location)){
-            Date expire = getExpirationDate(MembershipType.STANDARD);
-            if (this.db.add(new Member(fname, lname, dob, expire, location))){               //Checks if member has already been added to database
-                System.out.println(fname + " " + lname + " added.");
+            Date expire = getExpirationDate(membershipType);
+            Member memberToAdd;
+            switch (membershipType){
+                case STANDARD:
+                    memberToAdd = new Member(fname, lname, dob, expire, location);
+                    break;
+                case FAMILY:
+                    memberToAdd = new Family(fname, lname, dob, expire, location);
+                    break;
+                case PREMIUM:
+                    memberToAdd = new Premium(fname, lname, dob, expire, location);
+                    break;
+                default:
+                    memberToAdd = null;
             }
-            else {
-                System.out.println(fname + " " + lname + " is already in the database.");
-            }
-        }
-    }
-
-    /**
-     * Adds family gym member to database
-     * Checks if member can be added first
-     * @param fname first name of the member to add
-     * @param lname last name of the member to add
-     * @param dob birthday of the member to add
-     * @param location the gym the member belongs to
-     */
-    private void addFamily(String fname, String lname, String dob, String location){
-        if (canBeAdded(dob, location)){
-            Date expire = getExpirationDate(MembershipType.FAMILY);
-            if (this.db.add(new Family(fname, lname, dob, expire.toString(), location))){               //Checks if member has already been added to database
-                System.out.println(fname + " " + lname + " added.");
-            }
-            else {
-                System.out.println(fname + " " + lname + " is already in the database.");
-            }
-        }
-    }
-
-    /**
-     * Adds premium gym member to database
-     * Checks if member can be added first
-     * @param fname first name of the member to add
-     * @param lname last name of the member to add
-     * @param dob birthday of the member to add
-     * @param location the gym the member belongs to
-     */
-    private void addPremium(String fname, String lname, String dob, String location){
-        if (canBeAdded(dob, location)){
-            Date expire = getExpirationDate(MembershipType.PREMIUM);
-            if (this.db.add(new Premium(fname, lname, dob, expire.toString(), location))){               //Checks if member has already been added to database
+            if (this.db.add(memberToAdd)){               //Checks if member has already been added to database
                 System.out.println(fname + " " + lname + " added.");
             }
             else {
@@ -208,7 +183,7 @@ public class GymManager {
             System.out.println("DOB " + dob + ": must be 18 or older to join!");
             return false;
         }
-        if (Location.stringToLocation(location) == null){                                                //Checks if member's gym location exists
+        if (Location.stringToLocation(location) == null){                                   //Checks if member's gym location exists
             System.out.println(location + ": invalid location!");
             return false;
         }
@@ -295,15 +270,37 @@ public class GymManager {
     }
 
     /**
-     * Checks in member to online class
-     * First checks if member can check into class
-     * @param className name of the class to check into
+     * Prints the fitness class schedule
+     * Checks if class schedule is empty
+     * If not, prints class schedule
+     */
+    private void printSchedule(){
+        if (cs.isEmpty()){
+            System.out.println("Fitness class schedule is empty");
+            return;
+        }
+        System.out.println("-Fitness classes-");
+        cs.printClasses();
+        System.out.println("-end of class list.");
+    }
+
+    /**
+     * Checks in member to fitness class
+     * First checks if fitness class and member conditions are valid
+     * Then checks if member is enrolled in a class with conflicting time
+     * If member is standard (i.e. not instanceof Family), check if
+     * class location to check into is valid
+     * If all conditions above are met, checks member into class if
+     * not checked in or says member is already checked in
+     * @param className name of the class type to check into (ex: Pilates or Spinning)
+     * @param instructorName name of the instructor of the class to check into
+     * @param location location of the class to check into
      * @param fname first name of the member to check in
      * @param lname last name of the member to check in
      * @param dob birthday of the member to check in
      */
     private void checkIn(String className, String instructorName, String location, String fname, String lname, String dob){
-        if (canCheckIn(className, instructorName, location, fname, lname, dob)
+        if (validFitnessClassConditions(className, instructorName, location, fname, lname, dob)
                 && !classConflict(className, instructorName, location, fname, lname, dob)){
             Member memberToCheckIn = this.db.findMember(new Member(fname, lname, dob));
             if (!(memberToCheckIn instanceof Family)){
@@ -326,22 +323,131 @@ public class GymManager {
     }
 
     /**
-     * Checks if member meets all conditions to check in
+     * Drops member from fitness class
+     * First checks if fitness class and member conditions are valid
+     * If conditions are valid, drops member from class if
+     * they're checked in or says member is not checked in
+     * @param className name of the class type to drop (ex: Pilates or Spinning)
+     * @param instructorName name of the instructor of the class to drop
+     * @param location location of the class to drop
+     * @param fname first name of the member to drop from class
+     * @param lname last name of the member to drop from class
+     * @param dob birthday of the member to drop from class
+     */
+    private void checkOut(String className, String instructorName, String location, String fname, String lname, String dob) {
+       if(validFitnessClassConditions(className, instructorName, location, fname, lname, dob)){
+           FitnessClass classToDrop = cs.classExists(new FitnessClass(className, instructorName, location));
+           Member memberToDrop = this.db.findMember(new Member(fname, lname, dob));
+           if(classToDrop.find(memberToDrop) != null){
+               classToDrop.checkOut(memberToDrop);
+               System.out.println(fname + " " + lname + " done with the class.");
+               return;
+           }
+           System.out.println(fname + " " + lname + " did not check in.");
+       }
+    }
+
+    /**
+     * Checks in member's guest to fitness class
+     * First checks if fitness class and member conditions are valid
+     * Then checks if member is a standard member
+     * If member is standard, they can't check in a guest
+     * Then checks if class location for guest to check into is valid
+     * Then checks if member has guest passes (casts to confirm member is
+     * premium or family)
+     * If all conditions above are met, checks guest into class
+     * @param className name of the class type to check guest into (ex: Pilates or Spinning)
+     * @param instructorName name of the instructor of the class to check guest into
+     * @param location location of the class to check guest into
+     * @param fname first name of the member with guest to check in
+     * @param lname last name of the member with guest to check in
+     * @param dob birthday of the member with guest to check in
+     */
+    private void checkInGuest(String className, String instructorName, String location, String fname, String lname, String dob){
+        if(validFitnessClassConditions(className, instructorName, location, fname, lname, dob)){
+            Member memberWithGuest = this.db.findMember(new Member(fname, lname, dob));
+
+            if(!(memberWithGuest instanceof Family)){
+                System.out.println("Standard membership - guest check-in is not allowed.");
+                return;
+            }
+
+            if (!Location.stringToLocation(location).equals(memberWithGuest.getLocation())){
+                System.out.println(fname + " " + lname + " Guest checking in " + Location.stringToLocation(location).toString()
+                        + " - guest location restriction.");
+                return;
+            }
+
+            boolean havePass = false;
+            if(memberWithGuest instanceof Premium){
+                havePass = ((Premium) memberWithGuest).useGuestPass();
+            }
+            else if(memberWithGuest instanceof Family){
+                havePass = ((Family) memberWithGuest).useGuestPass();
+            }
+            if (!havePass){
+                System.out.println(fname + " " + lname + " ran out of guest pass.");
+                return;
+            }
+            FitnessClass classToEnrollIn = this.cs.classExists(new FitnessClass(className, instructorName, location));
+            classToEnrollIn.checkInGuest(memberWithGuest);
+            System.out.print(fname + " " + lname + " (guest) checked in ");
+            classToEnrollIn.print();
+        }
+    }
+
+    /**
+     * Drops guest from fitness class
+     * First checks if fitness class and member conditions are valid
+     * If conditions are valid, drops guest from class if
+     * they're checked in or says guest is not checked in
+     * @param className name of the class type to drop (ex: Pilates or Spinning)
+     * @param instructorName name of the instructor of the class to drop
+     * @param location location of the class to drop
+     * @param fname first name of the member to drop from class
+     * @param lname last name of the member to drop from class
+     * @param dob birthday of the member to drop from class
+     */
+    private void checkOutGuest(String className, String instructorName, String location, String fname, String lname, String dob){
+        if(validFitnessClassConditions(className, instructorName, location, fname, lname, dob)){
+            Member memberWithGuest = this.db.findMember(new Member(fname, lname, dob));
+            FitnessClass classToDrop = this.cs.classExists(new FitnessClass(className, instructorName, location));
+            if(classToDrop.findGuest(memberWithGuest) != null){
+                classToDrop.checkOutGuest(memberWithGuest);
+                if(memberWithGuest instanceof Premium){
+                    ((Premium) memberWithGuest).returnGuestPass();
+                }
+                else {
+                    ((Family) memberWithGuest).returnGuestPass();
+                }
+                System.out.println(fname + " " + lname + " Guest done with the class.");
+                return;
+            }
+            System.out.println(fname + " " + lname + " Guest did not check in.");
+        }
+    }
+
+    /**
+     * Checks if fitness class conditions are valid to check in or drop
      * Conditions include:
-     * - Birthday must be a valid date
+     * - Birthday of member must be a valid date
+     * - Instructor of class to check into must exist
      * - Member must exist in member database
-     * - Class to check into must exist
+     * - Class Type to check into must exist
      * - Member must have non-expired membership
-     * - Member must not have any time conflicts
-     *      with other classes they're enrolled in
-     * @param className name of the class to check into
-     * @param fname first name of the member to check in
-     * @param lname last name of the member to check in
-     * @param dob birthday of the member to check in
-     * @return true if member meets conditions to check into class
+     * - Location of class to check into must exist
+     * - Class with instructor, class type and location
+     *      must exist in class schedule
+     * @param className name of the class type whose conditions to check
+     * @param instructorName name of the instructor whose conditions to check
+     * @param location name of the location whose conditions to check
+     * @param fname first name of the member whose conditions to check
+     * @param lname last name of the member whose conditions to check
+     * @param dob birthday of the member whose conditions to check
+     * @return true if member and class meet conditions
      *         false otherwise
      */
-    private boolean canCheckIn(String className, String instructorName, String location, String fname, String lname, String dob) {
+    private boolean validFitnessClassConditions(String className, String instructorName, String location, String fname, String lname, String dob) {
         Date birthday = new Date(dob);
         if (!birthday.isValid()) {                                                       //Checks if birthday date is a valid date
             System.out.println("DOB " + dob + ": invalid calendar date!");
@@ -381,114 +487,35 @@ public class GymManager {
         return true;
     }
 
-    public boolean classConflict(String className, String instructorName, String location, String fname, String lname, String dob){
+    /**
+     * Checks if member is enrolled in a class with a conflicting time
+     * First checks that member is already enrolled in a class different
+     * from class to enroll in.
+     * If so, compares times of the two classes
+     * @param className name of the class type of class to enroll in
+     * @param instructorName name of the instructor of class to enroll in
+     * @param location name of the location of class to enroll in
+     * @param fname first name of the member to enroll in a fitness class
+     * @param lname last name of the member enroll in a fitness class
+     * @param dob birthday of the member enroll in a fitness class
+     * @return true if time conflict exists
+     *         false otherwise
+     */
+    private boolean classConflict(String className, String instructorName, String location, String fname, String lname, String dob){
         FitnessClass classToEnrollIn = cs.classExists(new FitnessClass(className, instructorName, location));
-        FitnessClass classConflict = cs.findMemberClass(new Member(fname,lname,dob));
+        FitnessClass classAlreadyEnrolledIn = cs.findClassMemberEnrolledIn(new Member(fname,lname,dob));
 
-        if (classConflict == null || classConflict.equals(classToEnrollIn)){
+        if (classAlreadyEnrolledIn == null || classAlreadyEnrolledIn.equals(classToEnrollIn)){
             return false;
         }
 
-        if (classConflict.getTime().equals(classToEnrollIn.getTime())){
+        if (classAlreadyEnrolledIn.getTime().equals(classToEnrollIn.getTime())){
             System.out.println("Time conflict - " + classToEnrollIn.getClassName().name() + " - " + classToEnrollIn.getInstructor().name()
                     + ", " + classToEnrollIn.getTime().toString() +
                     ", " + classToEnrollIn.getLocation().toString());
             return true;
         }
         return false;
-    }
-
-    /**
-     * Drops member from online class
-     * First checks if member meets all conditions to drop class
-     * Conditions include:
-     * - Birthday must be a valid date
-     * - Member must exist in member database
-     * - Class to drop must exist
-     * - Member must be enrolled in class to drop
-     * @param className name of the class to drop
-     * @param fname first name of the member to drop from class
-     * @param lname last name of the member to drop from class
-     * @param dob birthday of the member to drop from class
-     */
-    private void checkOut(String className, String instructorName, String location, String fname, String lname, String dob) {
-       if(canCheckIn(className, instructorName, location, fname, lname, dob)){
-           FitnessClass classCheckedIn = cs.classExists(new FitnessClass(className, instructorName, location));
-           Member m = this.db.findMember(new Member(fname, lname, dob));
-           if(classCheckedIn.find(m) != null){
-               classCheckedIn.checkOut(m);
-               System.out.println(fname + " " + lname + " done with the class.");
-               return;
-           }
-           System.out.println(fname + " " + lname + " did not check in.");
-       }
-    }
-
-    private void checkInGuest(String className, String instructorName, String location, String fname, String lname, String dob){
-        if(canCheckIn(className, instructorName, location, fname, lname, dob)){
-            boolean havePass = false;
-            Member memberToCheckIn = this.db.findMember(new Member(fname, lname, dob));
-
-            if(!(memberToCheckIn instanceof Family)){
-                System.out.println("Standard membership - guest check-in is not allowed.");
-                return;
-            }
-
-            if (!Location.stringToLocation(location).equals(memberToCheckIn.getLocation())){
-                System.out.println(fname + " " + lname + " Guest checking in " + Location.stringToLocation(location).toString()
-                        + " - guest location restriction.");
-                return;
-            }
-
-            if(memberToCheckIn instanceof Premium){
-                havePass = ((Premium) memberToCheckIn).useGuestPass();
-            }
-            else {
-                havePass = ((Family) memberToCheckIn).useGuestPass();
-            }
-            if (!havePass){
-                System.out.println(fname + " " + lname + " ran out of guest pass.");
-                return;
-            }
-            FitnessClass classToEnrollIn = this.cs.classExists(new FitnessClass(className, instructorName, location));
-            classToEnrollIn.checkInGuest(memberToCheckIn);
-            System.out.print(fname + " " + lname + " (guest) checked in ");
-            classToEnrollIn.print();
-        }
-    }
-
-    private void checkOutGuest(String className, String instructorName, String location, String fname, String lname, String dob){
-        if(canCheckIn(className, instructorName, location, fname, lname, dob)){
-            Member memberToCheckIn = this.db.findMember(new Member(fname, lname, dob));
-            FitnessClass classCheckedIn = this.cs.classExists(new FitnessClass(className, instructorName, location));
-            if(classCheckedIn.findGuest(memberToCheckIn) != null){
-                classCheckedIn.checkOutGuest(memberToCheckIn);
-                if(memberToCheckIn instanceof Premium){
-                    ((Premium) memberToCheckIn).returnGuestPass();
-                }
-                else {
-                    ((Family) memberToCheckIn).returnGuestPass();
-                }
-                System.out.println(fname + " " + lname + " Guest done with the class.");
-                return;
-            }
-            System.out.println(fname + " " + lname + " Guest did not check in.");
-        }
-    }
-
-    /**
-     * Prints the fitness class schedule
-     * Checks if class schedule is empty
-     * If not, prints class schedule
-     */
-    private void printSchedule(){
-        if (cs.isEmpty()){
-            System.out.println("Fitness class schedule is empty");
-            return;
-        }
-        System.out.println("-Fitness classes-");
-        cs.printClasses();
-        System.out.println("-end of class list.");
     }
 
     /**
@@ -579,7 +606,7 @@ public class GymManager {
      * For Standard and Family, expiration date is three months
      * from today
      * For Premium, expiration date is one year from today
-     * @param membershipType memberbership type of member
+     * @param membershipType membership type of member
      * @return expiration date corresponding to membership type
      */
     private Date getExpirationDate(MembershipType membershipType){

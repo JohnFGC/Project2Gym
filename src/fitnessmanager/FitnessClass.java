@@ -84,11 +84,11 @@ public class FitnessClass{
     }
 
     /**
-     * Checks into the class the member wants to be in,
-     * adds member to the specific database for class
-     * @param member, a member that wants to check into one of the fitness classes
-     * @param cName, a FitnessOptions enum that represents the fitness class that the member wants to check into
-     * @return true if class was checked in, false if class was not checked into
+     * Checks member into this class
+     * First verifies that member isn't already checked into this class
+     * @param member member to check into this cla
+     * @return true if member was checked into this class
+     *         false otherwise
      */
     public boolean checkIn(Member member) {
         if (this.memberList.contains(member)){
@@ -98,44 +98,80 @@ public class FitnessClass{
         return true;
     }
 
+    /**
+     * Drops member from this class
+     * @param member member to drop from this class
+     * @return true if member was dropped from this class
+     *         false otherwise
+     */
     public boolean checkOut(Member member){
         return this.memberList.remove(member);
     }
 
+    /**
+     * Checks guest into this class
+     * @param member member with guest to check into this class
+     */
     public void checkInGuest(Member member){
         this.guestList.add(member);
     }
 
+    /**
+     * Drops guest from this class
+     * @param member member with guest to drop from this class
+     * @return true if guest was dropped from this class
+     *         false otherwise
+     */
     public boolean checkOutGuest(Member member){
         return this.guestList.remove(member);
     }
 
+
     /**
-     * Checks if member is already stored in database
-     * Goes through database list to see if any stored member is
-     * equal to given member
-     * @param member the member to find in the database
-     * @return the index of the member in the list,
-     *         -1 if the member is not in the list
+     * Tries to find member in member list equal to input parameter
+     * Goes through list to see if any stored member is
+     * equal to parameter member
+     * @param memberToFind the member to find in member list
+     * @return the member stored in the list that's equal to
+     *              the input parameter
+     *         null if there is no such member in the database
      */
-    public Member find(Member member) {
-        for (Member m: memberList){
-            if (member.equals(m)){
-                return m;
+    public Member find(Member memberToFind) {
+        for (Member memberCheckedIn: memberList){
+            if (memberToFind.equals(memberCheckedIn)){
+                return memberCheckedIn;
             }
         }
         return null;
     }
 
-    public Member findGuest(Member member) {
-        for (Member m: guestList){
-            if (member.equals(m)){
-                return m;
+    /**
+     * Tries to find member in guest list equal to input parameter
+     * Goes through list to see if any stored member that checked in
+     * a guest is equal to parameter member
+     * @param memberToFind the member to find in guest list
+     * @return the member stored in the list that's equal to
+     *              the input parameter
+     *         null if there is no such member in the database
+     */
+    public Member findGuest(Member memberToFind) {
+        for (Member memberWithGuestCheckedIn: guestList){
+            if (memberToFind.equals(memberWithGuestCheckedIn)){
+                return memberWithGuestCheckedIn;
             }
         }
         return null;
     }
 
+    /**
+     * Determine equality between this fitness class and another
+     * Two fitness classes are equal if
+     *  - They have the same instructor
+     *  - They have the same class type
+     *  - They have the same location
+     * @param obj the fitness class to check equality with
+     * @return true if fitness classes are equal, false otherwise
+     */
     @Override
     public boolean equals(Object obj){
         if(obj instanceof FitnessClass){
@@ -147,19 +183,34 @@ public class FitnessClass{
         return false;
     }
 
-
+    /**
+     * Getter method for class's type (ex: Pilates)
+     * @return class's type
+     */
     public ClassName getClassName(){
         return this.className;
     }
 
+    /**
+     * Getter method for class's instructor
+     * @return class's instructor
+     */
     public Instructor getInstructor(){
         return this.instructor;
     }
 
+    /**
+     * Getter method for class's time
+     * @return class's time
+     */
     public Time getTime(){
         return this.time;
     }
 
+    /**
+     * Getter method for class's location
+     * @return class's location
+     */
     public Location getLocation(){
         return this.location;
     }

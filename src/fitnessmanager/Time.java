@@ -43,7 +43,7 @@ public enum Time {
 
     /**
      * Method takes in time name and returns a time enum
-     * @param str, string that represents time name
+     * @param str string that represents time name
      * @return time string was referring to if it exists,
      *         null otherwise
      */

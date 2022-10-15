@@ -24,7 +24,7 @@ public class Family extends Member{
      * @param expire expiration date of the member's gym membership
      * @param location the gym the member belongs to
      */
-    public Family(String fname, String lname, String dob, String expire, String location){
+    public Family(String fname, String lname, String dob, Date expire, String location){
         super(fname, lname, dob, expire, location);
         this.guestPasses = Constant.FAMILY_MAX_PASS_NUM.getValue();
     }

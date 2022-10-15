@@ -1,4 +1,5 @@
 package fitnessmanager;
+
 /**
  * Location Enum Class holds constant Locations, expressed by zipcode and county of gym
  * Stores the following data:

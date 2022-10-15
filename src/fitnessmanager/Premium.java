@@ -23,7 +23,7 @@ public class Premium extends Family{
      * @param expire expiration date of the member's gym membership
      * @param location the gym the member belongs to
      */
-    public Premium(String fname, String lname, String dob, String expire, String location){
+    public Premium(String fname, String lname, String dob, Date expire, String location){
         super(fname, lname, dob, expire, location);
         this.guestPasses = Constant.PREMIUM_MAX_PASS_NUM.getValue();
     }
