@@ -54,32 +54,19 @@ public class FitnessClass{
     }
 
     /**
-     * Prints out schedule of classes for the day the gym is run
-     * Includes the class name, instructor name, time,
-     * followed by all the members and guests that have checked into the class
-     * Only print out member and guest lists if they're nonempty
-     * Need if statement to print "hour:00" instead of "hour:0" if minute = 0
+     * Returns String representation of this fitness class
+     * Format ex: PILATES - JENNIFER, 9:30, BRIDGEWATER
+     * @return String representation of this fitness class
      */
-    public void print(){
+    @Override
+    public String toString(){
         if (time.getMinute() == 0){
-            System.out.println(className.name() + " - " + instructor.name() + ", " + time.getHour()
+            return (className.name() + " - " + instructor.name() + ", " + time.getHour()
                     + ":" + "00, " + location.name());
         }
         else {
-            System.out.println(className.name() + " - " + instructor.name() + ", " + time.getHour()
+            return (className.name() + " - " + instructor.name() + ", " + time.getHour()
                     + ":" + time.getMinute() + ", " + location.name());
-        }
-        if (!this.memberList.isEmpty()){
-            System.out.println("- Participants - ");
-            for (Member member: memberList){
-                System.out.println(member.toString());
-            }
-        }
-        if (!this.guestList.isEmpty()) {
-            System.out.println("- Guests - ");
-            for (Member member: guestList){
-                System.out.println(member.toString());
-            }
         }
     }
 
@@ -213,6 +200,56 @@ public class FitnessClass{
      */
     public Location getLocation(){
         return this.location;
+    }
+
+    /**
+     * Checks if member list is empty
+     * @return true if guest list is empty, false otherwise
+     */
+    public boolean memberListIsEmpty(){
+        return this.memberList.isEmpty();
+    }
+
+    /**
+     * Checks if guest list is empty
+     * @return true if guest list is empty, false otherwise
+     */
+    public boolean guestListIsEmpty(){
+        return this.guestList.isEmpty();
+    }
+
+    /**
+     * Getter method for member list size
+     * @return member list size
+     */
+    public int getMemberListSize() {
+        return memberList.size();
+    }
+
+    /**
+     * Getter method for guest list size
+     * @return guest list size
+     */
+    public int getGuestListSize() {
+        return guestList.size();
+    }
+
+    /**
+     * Getter method for specific index of member list
+     * @param index index whose member in member list is to be returned
+     * @return member from member list corresponding to index
+     */
+    public Member getIndexedMemberFromMemberList(int index){
+        return memberList.get(index);
+    }
+
+    /**
+     * Getter method for specific index of guest list
+     * @param index index whose member in guest list is to be returned
+     * @return member from guest list corresponding to index
+     */
+    public Member getIndexedMemberFromGuestList(int index){
+        return guestList.get(index);
     }
 }
 

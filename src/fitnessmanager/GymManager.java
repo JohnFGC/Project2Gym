@@ -285,6 +285,29 @@ public class GymManager {
     }
 
     /**
+     * Prints out fitness class
+     * Includes the class name, instructor name, time,
+     * followed by all members and guests that have checked into the class
+     */
+    private void printFitnessClass(FitnessClass fitnessClass){
+        System.out.println(fitnessClass.toString());
+        if (!fitnessClass.memberListIsEmpty()){
+            System.out.println("- Participants - ");
+            int size = fitnessClass.getMemberListSize();
+            for (int memberIndex = 0; memberIndex < size; memberIndex++){
+                System.out.println(fitnessClass.getIndexedMemberFromMemberList(memberIndex).toString());
+            }
+        }
+        if (!fitnessClass.guestListIsEmpty()) {
+            System.out.println("- Guests - ");
+            int size = fitnessClass.getGuestListSize();
+            for (int guestIndex = 0; guestIndex < size; guestIndex++){
+                System.out.println(fitnessClass.getIndexedMemberFromGuestList(guestIndex).toString());
+            }
+        }
+    }
+
+    /**
      * Checks in member to fitness class
      * First checks if fitness class and member conditions are valid
      * Then checks if member is enrolled in a class with conflicting time
@@ -314,7 +337,7 @@ public class GymManager {
             FitnessClass classToEnrollIn = this.cs.classExists(new FitnessClass(className, instructorName, location));
             if (classToEnrollIn.checkIn(memberToCheckIn)){
                 System.out.print(fname + " " + lname + " checked in ");
-                classToEnrollIn.print();
+                printFitnessClass(classToEnrollIn);
             }
             else {
                 System.out.println(fname + " " + lname + " already checked in.");
@@ -392,7 +415,7 @@ public class GymManager {
             FitnessClass classToEnrollIn = this.cs.classExists(new FitnessClass(className, instructorName, location));
             classToEnrollIn.checkInGuest(memberWithGuest);
             System.out.print(fname + " " + lname + " (guest) checked in ");
-            classToEnrollIn.print();
+            printFitnessClass(classToEnrollIn);
         }
     }
 
@@ -625,4 +648,5 @@ public class GymManager {
         }
         return null;
     }
+
 }

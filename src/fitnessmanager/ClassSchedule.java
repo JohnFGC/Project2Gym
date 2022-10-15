@@ -81,11 +81,26 @@ public class ClassSchedule {
     /**
      * Prints out schedule of classes for the day the gym is run
      * Includes the class name, instructor name, time,
-     * followed by all the members that have checked into the class
+     * followed by all members and guests that have checked into the class
      */
     public void printClasses(){
-        for(int i = 0; i < numClasses; i++){
-            classes[i].print();
+        for(int classIndex = 0; classIndex < numClasses; classIndex++){
+            System.out.println(classes[classIndex].toString());
+            if (!classes[classIndex].memberListIsEmpty()){
+                System.out.println("- Participants - ");
+                int size = classes[classIndex].getMemberListSize();
+                for (int memberIndex = 0; memberIndex < size; memberIndex++){
+                    System.out.println(classes[classIndex].getIndexedMemberFromMemberList(memberIndex).toString());
+                }
+            }
+            if (!classes[classIndex].guestListIsEmpty()) {
+                System.out.println("- Guests - ");
+                int size = classes[classIndex].getGuestListSize();
+                for (int guestIndex = 0; guestIndex < size; guestIndex++){
+                    System.out.println(classes[classIndex].getIndexedMemberFromGuestList(guestIndex).toString());
+                }
+            }
+
         }
     }
 
