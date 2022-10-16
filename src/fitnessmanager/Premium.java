@@ -29,6 +29,29 @@ public class Premium extends Family{
     }
 
     /**
+     * Creates a premium member object
+     * Starts with 3 guest passes (max per premium membership)
+     * @param fname first name of the member
+     * @param lname last name of the member
+     */
+    public Premium(String fname, String lname){
+        super(fname, lname);
+        this.guestPasses = Constant.PREMIUM_MAX_PASS_NUM.getValue();
+    }
+
+    /**
+     * Creates a premium member object
+     * Starts with 3 guest passes (max per premium membership)
+     * @param fname first name of the member
+     * @param lname last name of the member
+     * @param dob birthday of the member
+     */
+    public Premium(String fname, String lname, String dob){
+        super(fname, lname, dob);
+        this.guestPasses = Constant.PREMIUM_MAX_PASS_NUM.getValue();
+    }
+
+    /**
      * Returns guest pass for when guest drops out of class
      * If number of guest passes is less than max value,
      * add one to guest passes

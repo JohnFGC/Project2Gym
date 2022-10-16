@@ -7,7 +7,9 @@ import static org.junit.Assert.*;
 public class DateTest {
 
     @org.junit.Test
-    //Valid range for the month shall be 1-12
+    /**
+     * Valid range for the month shall be 1-12
+     */
     public void test_days_in_valid_month_range_false() {
         int monthTestCase1[] = {13, -1, 13, 100, 0, -12, 20};
         int dayTestCase1[] = {8, 31, 31, 0, -35, 2, -20};
@@ -20,7 +22,9 @@ public class DateTest {
     }
 
     @org.junit.Test
-    //Valid range for the day shall be 1-31 for the following numbered months: (1, 3, 5, 7, 8, 10, 12)
+    /**
+     * Valid range for the day shall be 1-31 for the following numbered months: (1, 3, 5, 7, 8, 10, 12)
+     */
     public void test_days_in_valid_day_range_for_thirty_one_false() {
         int monthTestCase2[]= {3, 12, 1, 5, 8, 10, 7};
         int dayTestCase2[]= {32, 32, 0, 100, -20, -2, 40};
@@ -33,7 +37,9 @@ public class DateTest {
     }
 
     @org.junit.Test
-    //Valid range for the day shall be 1-30 for the following numbered months: (4, 6, 9, 11)
+    /**
+     * Valid range for the day shall be 1-30 for the following numbered months: (4, 6, 9, 11)
+     */
     public void test_days_in_valid_day_range_for_thirty_false() {
         int monthTestCase3[]= {4, 9, 6, 9, 11};
         int dayTestCase3[]= {31, 33, 32, 31, 31};
@@ -46,7 +52,9 @@ public class DateTest {
     }
 
     @org.junit.Test
-    //February (month = 2) can’t have a date less than 1 nor more than 29.
+    /**
+     * February (month = 2) can’t have a date less than 1 nor more than 29.
+     */
     public void test_days_in_valid_day_range_for_feb_false() {
         int monthTestCase4[]= {2, 2, 2, 2, 2};
         int dayTestCase4[]= {30, 2011, -10, 0, -5};
@@ -59,7 +67,9 @@ public class DateTest {
     }
 
     @org.junit.Test
-    //Accepts the 29th of February only on leap years
+    /**
+     * Accepts the 29th of February only on leap years
+     */
     public void test_days_in_valid_leap_year_false() {
         int monthTestCase5[]= {2, 2, 2, 2, 2};
         int dayTestCase5[]= {29, 29, 29, 29, 29};
@@ -72,7 +82,9 @@ public class DateTest {
     }
 
     @org.junit.Test
-    //Valid range for the day shall be 1-31 for the following numbered months: (1, 3, 5, 7, 8, 10, 12)
+    /**
+     * Valid range for the day shall be 1-31 for the following numbered months: (1, 3, 5, 7, 8, 10, 12)
+     */
     public void test_days_in_valid_month_range_true() {
         int monthTestCase6[]= {3, 12, 1, 12, 5, 8, 1, 3, 5, 3, 1, 12, 5, 7, 12, 10, 3};
         int dayTestCase6[]= {30, 2, 20, 20, 1, 8, 20, 30, 1, 31, 31, 1, 31, 15, 31, 7, 31};
@@ -85,7 +97,9 @@ public class DateTest {
     }
 
     @org.junit.Test
-    //Valid range for the day shall be 1-30 for the following numbered months: (4, 6, 9, 11)
+    /**
+     * Valid range for the day shall be 1-30 for the following numbered months: (4, 6, 9, 11)
+     */
     public void test_days_in_valid_day_range_for_thirty_true() {
         int monthTestCase7[]= {4, 9, 6, 9, 11, 11, 6, 9, 9, 4, 6, 9, 9};
         int dayTestCase7[]= {10, 29, 30, 14, 30, 20, 30, 30, 2, 3, 30, 30, 9};
@@ -98,7 +112,9 @@ public class DateTest {
     }
 
     @org.junit.Test
-    //February valid date range is guaranteed to include 1-28.
+    /**
+     * February valid date range is guaranteed to include 1-28.
+     */
     public void test_days_in_valid_day_range_for_feb_true() {
         int monthTestCase8[]= {2, 2, 2, 2, 2};
         int dayTestCase8[]= {28, 1, 3, 2, 15};
@@ -111,7 +127,9 @@ public class DateTest {
     }
 
     @org.junit.Test
-    //Accepts the 29th of February only on leap years
+    /**
+     * Accepts the 29th of February only on leap years
+     */
     public void test_days_in_valid_leap_year_true() {
         int monthTestCase9[]= {2, 2, 2, 2, 2};
         int dayTestCase9[]= {29, 29, 29, 29, 29};

@@ -30,6 +30,29 @@ public class Family extends Member{
     }
 
     /**
+     * Creates a family member object
+     * Starts with 1 guest pass (max per family membership)
+     * @param fname first name of the member
+     * @param lname last name of the member
+     */
+    public Family(String fname, String lname){
+        super(fname, lname);
+        this.guestPasses = Constant.FAMILY_MAX_PASS_NUM.getValue();
+    }
+
+    /**
+     * Creates a family member object
+     * Starts with 1 guest pass (max per family membership)
+     * @param fname first name of the member
+     * @param lname last name of the member
+     * @param dob birthday of the member
+     */
+    public Family(String fname, String lname, String dob){
+        super(fname, lname, dob);
+        this.guestPasses = Constant.FAMILY_MAX_PASS_NUM.getValue();
+    }
+
+    /**
      * Uses guest pass
      * If number of guest passes is zero,
      * guest pass can't be used
