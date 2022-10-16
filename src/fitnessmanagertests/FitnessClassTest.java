@@ -136,10 +136,6 @@ public class FitnessClassTest {
         }
     }
 
-    @Test
-    public void checkOutGuest() {
-    }
-
     /**
      * Checks Out Family members GUESTS out of an arraylist stored in FitnessClass
      * This runs after all prerequisites are checked beforehand
