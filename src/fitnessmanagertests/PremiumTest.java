@@ -5,6 +5,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * PremiumTest is a JUnit class to test the membershipFee in the Premium class
+ * It runs through several tests for checking the types of members and what fees they have and are equal to
+ * @author Arya Shetty, John Greaney-Cheng
+ */
 public class PremiumTest {
 
     /**

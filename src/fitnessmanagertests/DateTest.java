@@ -1,14 +1,19 @@
 package fitnessmanagertests;
 
 import fitnessmanager.Date;
-
 import static org.junit.Assert.*;
 
+/**
+ * DateTest is a JUnit class to test the isValid method in the Date class
+ * It runs through several tests for checking the days, months, years, and even leap years
+ * @author Arya Shetty, John Greaney-Cheng
+ */
 public class DateTest {
 
     @org.junit.Test
     /**
-     * Valid range for the month shall be 1-12
+     * Tests valid range for the month which shall be 1-12,
+     * in this case the months are not valid
      */
     public void test_days_in_valid_month_range_false() {
         int monthTestCase1[] = {13, -1, 13, 100, 0, -12, 20};
@@ -23,7 +28,8 @@ public class DateTest {
 
     @org.junit.Test
     /**
-     * Valid range for the day shall be 1-31 for the following numbered months: (1, 3, 5, 7, 8, 10, 12)
+     * Tests valid range for the day which shall be 1-31 for the following numbered months: (1, 3, 5, 7, 8, 10, 12),
+     * in this case the days are not valid
      */
     public void test_days_in_valid_day_range_for_thirty_one_false() {
         int monthTestCase2[]= {3, 12, 1, 5, 8, 10, 7};
@@ -38,7 +44,8 @@ public class DateTest {
 
     @org.junit.Test
     /**
-     * Valid range for the day shall be 1-30 for the following numbered months: (4, 6, 9, 11)
+     * Tests valid range for the day which shall be 1-30 for the following numbered months: (4, 6, 9, 11),
+     * in this case the days are not valid
      */
     public void test_days_in_valid_day_range_for_thirty_false() {
         int monthTestCase3[]= {4, 9, 6, 9, 11};
@@ -53,7 +60,8 @@ public class DateTest {
 
     @org.junit.Test
     /**
-     * February (month = 2) can’t have a date less than 1 nor more than 29.
+     * Tests February (month = 2) which can’t have a day less than 1 nor more than 29,
+     * in this case the days are not valid
      */
     public void test_days_in_valid_day_range_for_feb_false() {
         int monthTestCase4[]= {2, 2, 2, 2, 2};
@@ -68,7 +76,8 @@ public class DateTest {
 
     @org.junit.Test
     /**
-     * Accepts the 29th of February only on leap years
+     * Tests that accepts the 29th of February only on leap years,
+     * in this case the days are not valid
      */
     public void test_days_in_valid_leap_year_false() {
         int monthTestCase5[]= {2, 2, 2, 2, 2};
@@ -83,7 +92,8 @@ public class DateTest {
 
     @org.junit.Test
     /**
-     * Valid range for the day shall be 1-31 for the following numbered months: (1, 3, 5, 7, 8, 10, 12)
+     * Tests valid range for the month which shall be 1-12,
+     * in this case the months are valid
      */
     public void test_days_in_valid_month_range_true() {
         int monthTestCase6[]= {3, 12, 1, 12, 5, 8, 1, 3, 5, 3, 1, 12, 5, 7, 12, 10, 3};
@@ -98,7 +108,8 @@ public class DateTest {
 
     @org.junit.Test
     /**
-     * Valid range for the day shall be 1-30 for the following numbered months: (4, 6, 9, 11)
+     * Tests valid range for the day which shall be 1-31 for the following numbered months: (1, 3, 5, 7, 8, 10, 12),
+     * in this case the days are valid
      */
     public void test_days_in_valid_day_range_for_thirty_true() {
         int monthTestCase7[]= {4, 9, 6, 9, 11, 11, 6, 9, 9, 4, 6, 9, 9};
@@ -113,7 +124,8 @@ public class DateTest {
 
     @org.junit.Test
     /**
-     * February valid date range is guaranteed to include 1-28.
+     * Tests February (month = 2) which can’t have a day less than 1 nor more than 29,
+     * in this case the days are valid
      */
     public void test_days_in_valid_day_range_for_feb_true() {
         int monthTestCase8[]= {2, 2, 2, 2, 2};
@@ -128,7 +140,8 @@ public class DateTest {
 
     @org.junit.Test
     /**
-     * Accepts the 29th of February only on leap years
+     * Tests that accepts the 29th of February only on leap years,
+     * in this case the days are valid
      */
     public void test_days_in_valid_leap_year_true() {
         int monthTestCase9[]= {2, 2, 2, 2, 2};

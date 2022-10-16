@@ -5,6 +5,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * FitnessClassTest is a JUnit class to test the checkIn, checkOut, checkInGuest, checkOutGuest methods in the FitnessClass class
+ * It runs through several tests for checking the types of members allowed in and for duplicates (dupes) of members
+ * @author Arya Shetty, John Greaney-Cheng
+ */
 public class FitnessClassTest {
     /**
      * Checks in Standard members into an arraylist stored in FitnessClass
